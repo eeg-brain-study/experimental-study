@@ -27,7 +27,7 @@ For convenience, we provide the `/data` folder that contains all the data result
 
 We provided the statistics results from our experiment on `/statistic`
 
-# Analisys 
+# Analysis 
 
 In `/scripts` we share our analysis scripts that process the input data.
 
