@@ -29,19 +29,19 @@ clear all
 tic % Start timer to measure execution time
 
 % Define the path to the folder containing the EEG data files
-pastaDados= 'DataPath\';
+dataPath= 'DataPath\';
 
 % List all EDF files in the specified folder
-arq=dir([pastaDados, '*.edf']); % Retrieve EDF files in 'pastaDados'
-tamanho=length(arq); % Get the number of files in the folder
-mkdir([pastaDados 'SET\']); % Create a new directory to store SET files
+fileList=dir([dataPath, '*.edf']); % Retrieve EDF files in 'dataPath'
+numFiles=length(fileList); % Get the number of files in the folder
+mkdir([dataPath 'SET\']); % Create a new directory to store SET files
 
 % Loop through each EDF file
-for i=1:tamanho
-    disp(arq(i).name); % Display the name of the current file being processed
+for i=1:numFiles
+    disp(fileList(i).name); % Display the name of the current file being processed
     
     % Load the EDF file without importing events, annotations, or epoching
-    EEG = pop_biosig([pastaDados arq(i).name], 'importevent','off', 'blockepoch','off','importannot','off');
+    EEG = pop_biosig([dataPath fileList(i).name], 'importevent','off', 'blockepoch','off','importannot','off');
     
     % Remove unwanted channels from the dataset
     EEG = pop_select(EEG,'nochannel',{'M1','M2','Cb2','Cb1','VEOG','HEOG','EMG','EKG','Fz','FT11','F11','F12','FT12','Status'});
@@ -62,11 +62,11 @@ for i=1:tamanho
     EEG = eeg_checkset(EEG);
     
     % Save the processed EEG data as a SET file in the newly created directory
-    EEG = pop_saveset(EEG, 'filename',arq(i).name,'filepath',[pastaDados 'SET\']);
+    EEG = pop_saveset(EEG, 'filename',fileList(i).name,'filepath',[dataPath 'SET\']);
 end
 
 % Calculate and display the total execution time in minutes
-tempo_total = toc;  % End the timer
-tempo_total1 = tempo_total / 60; % Convert seconds to minutes
-disp(['Total execution time: ' num2str(tempo_total1) ' minutes']);
+total_time = toc;  % End the timer
+total_time_minutes = total_time / 60; % Convert seconds to minutes
+disp(['Total execution time: ' num2str(total_time_minutes) ' minutes']);
 disp('END');

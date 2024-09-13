@@ -32,34 +32,30 @@ clc;
 eeglab;
 
 % Define the directory where the .edf files are located
-diretorio = 'path\abc.edf';
+directory = 'path\abc.edf';
 
 % List all .edf files in the directory
-arquivos_edf = dir(fullfile(diretorio, '*.edf'));
-num_arquivos = length(arquivos_edf);
+edf_files = dir(fullfile(directory, '*.edf'));
+num_files = length(edf_files);
 
 % Ensure there are at least two .edf files to merge
-if num_arquivos < 2
+if num_files < 2
     error('At least two .edf files are required to merge.');
 end
 
 % Load the first .edf file
-EEG = pop_biosig(fullfile(diretorio, arquivos_edf(1).name));
+EEG = pop_biosig(fullfile(directory, edf_files(1).name));
 
 % Loop to merge the remaining .edf files
-for i = 2:num_arquivos
-    arquivo_atual = fullfile(diretorio, arquivos_edf(i).name);
-    EEG_tmp = pop_biosig(arquivo_atual);
+for i = 2:num_files
+    current_file = fullfile(directory, edf_files(i).name);
+    EEG_tmp = pop_biosig(current_file);
     EEG = pop_mergeset(EEG, EEG_tmp, 1);
 end
 
 % Save the merged dataset as an EDF file
-arquivo_unificado = fullfile(diretorio, '007_BL23.edf');
-pop_writeeeg(EEG, arquivo_unificado, 'TYPE', 'EDF');
+merged_file = fullfile(directory, '007_BL23.edf');
+pop_writeeeg(EEG, merged_file, 'TYPE', 'EDF');
 
 % Display success message
 disp('EDF files merged and saved successfully.');
-
-
-
-
